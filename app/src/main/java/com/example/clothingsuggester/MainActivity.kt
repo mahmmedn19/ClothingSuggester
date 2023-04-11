@@ -1,19 +1,24 @@
 package com.example.clothingsuggester
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.clothingsuggester.data.Location
+import com.example.clothingsuggester.data.WeatherData
 import com.example.clothingsuggester.databinding.ActivityMainBinding
+import com.example.clothingsuggester.utils.Constant
+import com.example.clothingsuggester.utils.DateTimeFormat
 import com.google.gson.Gson
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    //val api_key = BuildConfig
-    val client = OkHttpClient()
+    private val apikey = BuildConfig.API_KEY
+    private val client = OkHttpClient()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,41 +32,41 @@ class MainActivity : AppCompatActivity() {
     private fun makeRequest() {
         Log.i(TAG, "Make")
 
-        val url = HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(BASE_URL)
-            .addQueryParameter(WEATHER_API_KEY, "123")
-            .addQueryParameter(WEATHER_Q, "egypt")
-            .build()
+        val httpUrl = Constant.BASE_URL.toHttpUrlOrNull()?.newBuilder()?.apply {
+            addQueryParameter(Constant.WEATHER_API_KEY, apikey)
+            addQueryParameter(Constant.WEATHER_QUERY_PARAM, "egypt")
+        }?.build()
 
         val request = Request.Builder()
-            .url(url).build()
+            .url(httpUrl!!).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i(TAG, "${e.message}")
             }
-
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let {
-                    val result = Gson().fromJson(it, Location::class.java)
-                    runOnUiThread {
-                        binding.textDate.text = result.country
-                    }
+                val responseBody = response.body?.string().toString()
+                val weatherData = parseResponse(responseBody)
+                runOnUiThread {
+                    val (formattedDate, formattedTime) = DateTimeFormat.parseDateString(weatherData.location.localDateTime)
+                    binding.textDate.text = formattedDate
+                    binding.textTime.text = formattedTime
+
+
                 }
-                Log.i(TAG, response.body?.string().toString())
+                Log.i(TAG, "responseBody : $responseBody")
+
             }
 
         })
     }
 
-    companion object {
-        const val TAG = "Main"
-        const val SCHEME = "https"
-        const val BASE_URL = "api.weatherapi.com/v1/current.json"
+    private fun parseResponse(responseBody: String?): WeatherData {
+        return Gson().fromJson(responseBody, WeatherData::class.java)
+    }
 
-        //  const val WEATHER_API_KEY = BuildConfig.
-        const val WEATHER_API_KEY = "key"
-        const val WEATHER_Q = "q"
+    companion object {
+        const val TAG = "MainActivity"
     }
 }
