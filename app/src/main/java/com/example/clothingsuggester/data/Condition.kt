@@ -1,6 +1,9 @@
 package com.example.clothingsuggester.data
 
+import com.google.gson.annotations.SerializedName
+
 data class Condition(
-    val text: String,
-    val icon: String,
+    @SerializedName("text")val weatherStatus: String,
+    @SerializedName("icon")val weatherStatusicon: String,
+    val code: Int
 )
