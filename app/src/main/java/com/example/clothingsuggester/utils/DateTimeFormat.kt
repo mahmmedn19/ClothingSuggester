@@ -11,10 +11,10 @@ object DateTimeFormat {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         val dateTime = LocalDateTime.parse(dateString, formatter)
 
-        // Format the LocalDateTime object to "Apr 11" and "21:17"
         val monthDayFormatter = DateTimeFormatter.ofPattern("MMM dd")
         val dateFormatter = dateTime.format(monthDayFormatter)
-        val hourMinuteFormatter = DateTimeFormatter.ofPattern("HH:mm a")
+
+        val hourMinuteFormatter = DateTimeFormatter.ofPattern("hh:mm a")
         val timeFormatter = dateTime.format(hourMinuteFormatter)
 
         return Pair(dateFormatter, timeFormatter)
