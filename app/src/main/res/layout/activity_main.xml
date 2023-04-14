@@ -7,28 +7,13 @@
     android:background="#EDF3FA"
     tools:context=".MainActivity">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/text_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        style="@style/TextViewStyleWelcome"
         android:text="@string/what_s_up"
-        android:textColor="@color/black_87"
-        android:textSize="32sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,12 +21,8 @@
         android:id="@+id/text_weather_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         tools:text="@string/location"
-        android:textColor="@color/black_87"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        style="@style/TextViewStyleWeatherCountry"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_welcome" />
 
@@ -49,10 +30,8 @@
         android:id="@+id/text_weather_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         tools:text="@string/city"
-        android:textColor="@color/black_60"
-        android:textSize="18sp"
+        style="@style/TextViewStyleWeatherCity"
         app:layout_constraintBottom_toBottomOf="@+id/text_weather_country"
         app:layout_constraintStart_toEndOf="@+id/text_weather_country"
         app:layout_constraintTop_toTopOf="@+id/text_weather_country" />
@@ -73,14 +52,22 @@
             android:layout_height="match_parent"
             android:padding="16dp">
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ProgressStyle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/text_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="@string/weather_date"
-                android:textColor="@color/black_87"
-                android:textSize="16sp"
-                android:textStyle="normal"
+                style="@style/TextViewStyleWeather"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,17 +76,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="7"
-                android:textColor="@color/black_87"
-                android:textSize="16sp"
+                style="@style/TextViewStyleWeather"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/weather_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_launcher_foreground"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/sunny1"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_date" />
@@ -109,9 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="@string/weather_degree"
-                android:textColor="@color/black_87"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                style="@style/TextViewStyleWeatherDegree"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_date" />
@@ -120,11 +105,8 @@
                 android:id="@+id/text_weather_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 tools:text="@string/weather_status"
-                android:textColor="@color/black_38"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/TextViewStyleWeatherStatus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/weather_image" />
