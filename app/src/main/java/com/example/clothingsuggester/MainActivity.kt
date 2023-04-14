@@ -35,19 +35,21 @@ class MainActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
         getCurrentLocation()
     }
-    private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+
+    private fun showProgress(show: Boolean) {
+        if (show) {
+            binding.progressBar.visibility = View.VISIBLE
+
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
-    private fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
     private fun makeRequest(locatoin: String) {
         Log.i(TAG, "Make")
-
+        showProgress(true)
         val httpUrl = Constant.BASE_URL.toHttpUrlOrNull()?.newBuilder()?.apply {
             addQueryParameter(Constant.WEATHER_API_KEY, apikey)
             addQueryParameter(Constant.WEATHER_QUERY_PARAM, locatoin)
@@ -58,13 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                hideProgressBar()
                 Log.i(TAG, "${e.message}")
+                showProgress(false)
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call, response: Response) {
-                hideProgressBar()
                 val responseBody = response.body?.string().toString()
                 val weatherData = parseResponse(responseBody)
                 runOnUiThread {
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                     binding.textWeatherStatus.text = weatherData.current.condition?.weatherStatus
                     binding.textWeatherDegree.text = getString(R.string.weather_degree, weatherData.current.temp_c.toString())
                     binding.weatherImage.setImageDrawable(AppCompatResources.getDrawable(applicationContext, R.drawable.ic_launcher_background))
+                    showProgress(false)
                 }
                 Log.i(TAG, "responseBody : $responseBody")
 
