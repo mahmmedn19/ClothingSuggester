@@ -13,12 +13,14 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import com.example.clothingsuggester.data.WeatherData
 import com.example.clothingsuggester.databinding.ActivityMainBinding
+import com.example.clothingsuggester.utils.ClothingImages
 import com.example.clothingsuggester.utils.Constant
 import com.example.clothingsuggester.utils.DateTimeFormat
 import com.example.clothingsuggester.utils.MyHttpClient
 import com.example.clothingsuggester.utils.SharedUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -28,16 +30,11 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val apikey = BuildConfig.API_KEY
     private val myHttpClient = MyHttpClient()
     private val sharedUtil = SharedUtil(this)
-    private var summerClothes =
-        listOf(R.drawable.summer1, R.drawable.summer2, R.drawable.summer3, R.drawable.summer4)
-    private var winterClothes =
-        listOf(R.drawable.winter1, R.drawable.winter2, R.drawable.winter3, R.drawable.winter4)
-    private var otherClothes =
-        listOf(R.drawable.other1, R.drawable.other2, R.drawable.other3, R.drawable.other4)
-
+    private var summerClothes = ClothingImages.getSummerClothes()
+    private var winterClothes = ClothingImages.getWinterClothes()
+    private var otherClothes = ClothingImages.getOtherClothes()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -58,8 +55,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildHttpUrl(location: String): HttpUrl {
         return Constant.BASE_URL.toHttpUrlOrNull()?.newBuilder()?.apply {
-            addQueryParameter(Constant.WEATHER_API_KEY, apikey)
-            addQueryParameter(Constant.WEATHER_QUERY_PARAM, "Sweden")
+            addQueryParameter(Constant.WEATHER_API_KEY, Constant.apikey)
+            addQueryParameter(Constant.WEATHER_QUERY_PARAM, location)
         }?.build()!!
     }
 
@@ -74,14 +71,7 @@ class MainActivity : AppCompatActivity() {
         binding.textWeatherStatus.text = weatherData.current.condition?.weatherStatus
         binding.textWeatherDegree.text =
             getString(R.string.weather_degree, weatherData.current.temp_c.toString())
-        val imageResource = getRandomImageForWeatherStatus(weatherData.current.temp_c!!.toInt())
-        binding.imageClothes.setImageDrawable(
-            AppCompatResources.getDrawable(
-                applicationContext, imageResource
-            )
-        )
-        sharedUtil.saveWornClothes(setOf(imageResource.toString()))
-
+        getUpdatedWornClothesImage(weatherData.current.temp_c!!.toInt())
     }
 
     private fun parseResponse(responseBody: String?): WeatherData {
@@ -92,13 +82,18 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "Make")
         showProgress(true)
         val httpUrl = buildHttpUrl(location)
-
         val request = Request.Builder().url(httpUrl).build()
-
         myHttpClient.client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i(TAG, "${e.message}")
                 showProgress(false)
+                runOnUiThread {
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Failed to make network request: ${e.message}",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -160,25 +155,54 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun getRandomImageForWeatherStatus(weatherStatus: Int): Int {
-        return when {
-            weatherStatus > 20 -> {
-                binding.weatherImage.setAnimation(R.raw.sunny)
-                binding.weatherImage.playAnimation()
-                summerClothes.random()
-            }
+    private fun getUpdatedWornClothesImage(weatherStatus: Int) {
+        val wornClothesSet = sharedUtil.getWornClothes()
+        val newWornClothesSet = mutableSetOf<String>()
+        val imageResource = getRandomImageForWeatherStatus(weatherStatus)
 
-            weatherStatus < 10 -> {
-                binding.weatherImage.setAnimation(R.raw.winter)
-                binding.weatherImage.playAnimation()
-                winterClothes.random()
+        if (wornClothesSet.contains(imageResource.toString())) {
+            val filteredWornClothesSet = wornClothesSet.filter { it != imageResource.toString() }
+            val newImageResource = if (filteredWornClothesSet.isEmpty()) {
+                getRandomImageForWeatherStatus(weatherStatus)
+            } else {
+                filteredWornClothesSet.random().toInt()
             }
-            else -> {
-                binding.weatherImage.setAnimation(R.raw.other)
-                binding.weatherImage.playAnimation()
-                otherClothes.random()
-            }
+            binding.imageClothes.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    applicationContext, newImageResource
+                )
+            )
+            newWornClothesSet.addAll(filteredWornClothesSet)
+            newWornClothesSet.add(newImageResource.toString())
+        } else {
+            binding.imageClothes.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    applicationContext, imageResource
+                )
+            )
+            newWornClothesSet.addAll(wornClothesSet)
+            newWornClothesSet.add(imageResource.toString())
         }
+        sharedUtil.saveWornClothes(newWornClothesSet)
+    }
+
+    private fun getRandomImageForWeatherStatus(weatherStatus: Int): Int {
+        val clothes = when {
+            weatherStatus > 20 -> summerClothes
+            weatherStatus < 10 -> winterClothes
+            else -> otherClothes
+        }
+
+        val animation = when (clothes) {
+            summerClothes -> R.raw.sunny
+            winterClothes -> R.raw.winter
+            else -> R.raw.other
+        }
+
+        binding.weatherImage.setAnimation(animation)
+        binding.weatherImage.playAnimation()
+
+        return clothes.random()
     }
 
     companion object {
