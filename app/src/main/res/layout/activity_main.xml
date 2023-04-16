@@ -4,54 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDF3FA"
+    android:background="#E6F2FB"
     tools:context=".MainActivity">
+
 
     <TextView
         android:id="@+id/text_welcome"
+        style="@style/TextViewStyleWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:text="@string/what_s_up"
-        android:textColor="@color/black_87"
-        android:textSize="32sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_weather_country"
+        style="@style/TextViewStyleWeatherCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/location"
-        android:textColor="@color/black_87"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_welcome" />
+        app:layout_constraintTop_toBottomOf="@+id/text_welcome"
+        tools:text="@string/location" />
 
     <TextView
         android:id="@+id/text_weather_city"
+        style="@style/TextViewStyleWeatherCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="@string/city"
-        android:textColor="@color/black_60"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/text_weather_country"
         app:layout_constraintStart_toEndOf="@+id/text_weather_country"
-        app:layout_constraintTop_toTopOf="@+id/text_weather_country" />
+        app:layout_constraintTop_toTopOf="@+id/text_weather_country"
+        app:layout_constraintVertical_bias="1.0"
+        tools:text="@string/city" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        android:layout_height="220dp"
+        android:layout_margin="@dimen/spacing_medium"
+        app:cardBackgroundColor="@color/white_200"
+        app:cardCornerRadius="@dimen/spacing_medium"
+        app:cardElevation="@dimen/elevation_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_weather_country">
@@ -59,96 +53,93 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="24dp">
+            android:padding="@dimen/spacing_medium">
 
-            <TextView
-                android:id="@+id/text_date"
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@style/ProgressStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weather_date"
-                android:textColor="@color/black_87"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/text_num_date"
+                android:id="@+id/text_date"
+                style="@style/TextViewStyleWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="7"
-                android:textColor="@color/black_60"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/text_date"
-                app:layout_constraintStart_toEndOf="@+id/text_date"
-                app:layout_constraintTop_toTopOf="@+id/text_date" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/weather_date" />
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <TextView
+                android:id="@+id/text_time"
+                style="@style/TextViewStyleWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="7" />
+
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/weather_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_launcher_foreground"
+                android:layout_width="180dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginEnd="-32dp"
+                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_date" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                tools:lottie_rawRes="@raw/sunny1" />
 
             <TextView
-                android:id="@+id/text_wheather_degree"
+                android:id="@+id/text_weather_degree"
+                style="@style/TextViewStyleWeatherDegree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weather_degree"
-                android:textColor="@color/black_87"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weather_image" />
+                app:layout_constraintTop_toBottomOf="@+id/text_date"
+                tools:text="@string/weather_degree" />
 
             <TextView
-                android:id="@+id/text_wheather_state"
+                android:id="@+id/text_weather_status"
+                style="@style/TextViewStyleWeatherStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weather_status"
-                android:textColor="@color/black_87"
-                android:textSize="24sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weather_image" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_weather_degree"
+                tools:text="@string/weather_status" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        style="@style/TabLayoutStyle"
-        android:background="@drawable/background_tap"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <TextView
+        android:id="@+id/text_header"
+        style="@style/TextViewStyleWeatherStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card"
-        app:tabSelectedTextColor="@color/primary_500"
-        app:tabTextAppearance="@style/TabTextAppearance">
+        android:text="Suggest for you"
+        android:textStyle="italic"
+        />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all_clothes" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/suggest_clothes" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/personal_viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:padding="16dp"
+    <ImageView
+        android:id="@+id/image_clothes"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:scaleType="centerCrop"
+        android:padding="@dimen/spacing_large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/text_header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
