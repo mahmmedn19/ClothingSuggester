@@ -125,16 +125,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_medium"
+        android:textSize="@dimen/text_giant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card"
-        android:text="Suggest for you"
+        android:text="@string/suggest_for_you"
         android:textStyle="italic"
         />
 
     <ImageView
         android:id="@+id/image_clothes"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:scaleType="centerCrop"
         android:padding="@dimen/spacing_large"
         app:layout_constraintBottom_toBottomOf="parent"
