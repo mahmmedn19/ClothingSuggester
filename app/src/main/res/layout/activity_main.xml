@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/text_welcome"
         style="@style/TextViewStyleWelcome"
@@ -47,7 +48,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="230dp"
         android:layout_margin="@dimen/spacing_medium"
         app:cardBackgroundColor="@color/white_200"
         app:cardCornerRadius="@dimen/spacing_medium"
@@ -107,10 +108,13 @@
                 style="@style/TextViewStyleWeatherStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_tiny"
+                android:textSize="@dimen/text_giant24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_weather_degree"
-                tools:text="@string/weather_status" />
+                tools:text="Sunny" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -121,19 +125,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_medium"
-        android:textSize="@dimen/text_giant"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card"
         android:text="@string/suggest_for_you"
-        android:textStyle="italic"
-        />
+        android:textColor="@color/black_78"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card" />
 
     <ImageView
         android:id="@+id/image_clothes"
         android:layout_width="260dp"
         android:layout_height="260dp"
-        android:scaleType="centerCrop"
         android:padding="@dimen/spacing_large"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

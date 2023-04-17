@@ -8,5 +8,5 @@
     <string name="weather_degree">%s °C</string>
     <string name="weather_status">Sunny</string>
     <string name="weather_date">Apr</string>
-    <string name="suggest_for_you">Suggest for you....</string>
+    <string name="suggest_for_you">Suggest Clothes for you....</string>
 </resources>
