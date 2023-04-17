@@ -1,10 +1,9 @@
 package com.example.clothingsuggester.data
 
 import com.example.clothingsuggester.data.Condition
+import com.google.gson.annotations.SerializedName
 
 data class Current(
-    val condition: Condition?,
-    val temp_c: Double?,
-    val temp_f: Double?,
-    val last_updated: String?
+    @SerializedName("condition")val condition: Condition?,
+    @SerializedName("temp_c")val tempCelsius: Double?,
 )
