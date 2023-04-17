@@ -2,20 +2,20 @@ package com.example.clothingsuggester.utils
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object DateTimeFormat {
     @RequiresApi(Build.VERSION_CODES.O)
     fun parseDateString(dateString: String?): Pair<String, String> {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-        val dateTime = LocalDateTime.parse(dateString, formatter)
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val date = inputFormat.parse(dateString)
 
-        val monthDayFormatter = DateTimeFormatter.ofPattern("MMM dd")
-        val dateFormatter = dateTime.format(monthDayFormatter)
+        val monthDayFormatter = SimpleDateFormat("MMM dd", Locale.getDefault())
+        val dateFormatter = monthDayFormatter.format(date)
 
-        val hourMinuteFormatter = DateTimeFormatter.ofPattern("hh:mm a")
-        val timeFormatter = dateTime.format(hourMinuteFormatter)
+        val hourMinuteFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val timeFormatter = hourMinuteFormatter.format(date)
 
         return Pair(dateFormatter, timeFormatter)
     }
