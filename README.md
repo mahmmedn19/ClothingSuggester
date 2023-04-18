@@ -10,12 +10,12 @@ The Clothing Suggester App is a mobile application designed to help users quickl
 - [License](#license)
 
 ## Features
-Check the weather in the user's city using an API of your choice
-Allow the user to upload images of their own clothing
-Suggest appropriate outfits based on temperature and weather conditions
-Use shared preferences to avoid suggesting previously worn outfits
-Group clothes based on temperature ranges
-Use the OKHttp library for networking
+- Check the weather in the user's city using an API of your choice
+- Allow the user to upload images of their own clothing
+- Suggest appropriate outfits based on temperature and weather conditions
+- Use shared preferences to avoid suggesting previously worn outfits
+- Group clothes based on temperature ranges
+- Use the OKHttp library for networking
 
 ## Screenshots
 
@@ -29,8 +29,8 @@ Use the OKHttp library for networking
 To get started with the Clothing Suggester App, follow these steps:
 
 Clone the repository to your local machine
-Open the project in Android Studio
-Run the app on an emulator or physical device
+- Open the project in Android Studio
+- Run the app on an emulator or physical device
 
 ## Contributing
 We welcome contributions to the project via pull requests. Please ensure that any contributions meet our quality standards.
