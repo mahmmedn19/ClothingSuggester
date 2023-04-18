@@ -21,7 +21,7 @@ The Clothing Suggester App is a mobile application designed to help users quickl
 
 <p align="center">
 <img src="/preview/image1.gif" width="32%"/>
-<img src="/preview/image2.gif" width="32%"/>
+<img src="https://user-images.githubusercontent.com/100851080/232757679-273b40f6-7d31-4fad-bd7b-a14e3c0ea25c.gif" width="32%"/>
 <img src="/preview/image3.gif" width="32%"/>
 </p>
 
