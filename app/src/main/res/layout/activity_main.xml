@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".MainActivity">
 
     <View
         android:id="@+id/view_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/sunny_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +31,8 @@
         style="@style/TextViewStyleWeatherCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_location"
+        android:drawablePadding="@dimen/spacing_tiny"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_welcome"
         tools:text="@string/location" />
@@ -48,9 +52,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="200dp"
         android:layout_margin="@dimen/spacing_medium"
-        app:cardBackgroundColor="@color/white_200"
+        android:outlineSpotShadowColor="@color/primary_100"
         app:cardCornerRadius="@dimen/spacing_medium"
         app:cardElevation="@dimen/elevation_small"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +71,8 @@
                 style="@style/TextViewStyleWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_date"
+                android:drawablePadding="@dimen/spacing_tiny"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/weather_date" />
@@ -76,21 +82,19 @@
                 style="@style/TextViewStyleWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_time"
+                android:drawablePadding="@dimen/spacing_tiny"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="7" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/weather_image"
+                style="@style/LottieStyle"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:layout_marginEnd="-32dp"
-                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
                 tools:lottie_rawRes="@raw/sunny1" />
 
             <TextView
@@ -98,7 +102,7 @@
                 style="@style/TextViewStyleWeatherDegree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="40sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_date"
                 tools:text="@string/weather_degree" />
@@ -108,10 +112,10 @@
                 style="@style/TextViewStyleWeatherStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_tiny"
+                android:textColor="@color/primary_900"
                 android:textSize="@dimen/text_giant24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/text_weather_degree"
+                app:layout_constraintStart_toStartOf="@+id/text_weather_degree"
                 app:layout_constraintTop_toBottomOf="@+id/text_weather_degree"
                 tools:text="Sunny" />
 
@@ -126,7 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_medium"
         android:text="@string/suggest_for_you"
-        android:textColor="@color/black_78"
+        android:textColor="@color/primary_900"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card" />
 
