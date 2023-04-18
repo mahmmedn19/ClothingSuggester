@@ -1,12 +1,16 @@
 package com.example.clothingsuggester
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
@@ -98,8 +102,6 @@ class MainActivity : AppCompatActivity() {
         myHttpClient.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                Log.i(TAG, "${e.message}")
-                showProgress(false)
                 runOnUiThread {
                     Snackbar.make(
                         findViewById(android.R.id.content),
@@ -111,24 +113,81 @@ class MainActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string().toString()
-                val weatherData = parseResponse(responseBody)
-                runOnUiThread {
-                    updateUi(weatherData)
-                    showProgress(false)
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    val weatherData = parseResponse(responseBody)
+                    runOnUiThread {
+                        showProgress(false)
+                        updateUi(weatherData)
+                    }
+                } else {
+                    runOnUiThread {
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Failed to get weather data: ${response.message}",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                 }
-                Log.i(TAG, "responseBody : $responseBody")
+                response.close()
             }
-
         })
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation()
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        ACCESS_FINE_LOCATION
+                    )
+                ) {
+                    AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission, please accept to use location functionality.")
+                        .setPositiveButton("OK") { _, _ ->
+                            requestLocationPermission()
+                        }
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            Toast.makeText(this,"This app needs the Location permission",Toast.LENGTH_LONG).show()
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                } else {
+                    AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission. Please go to Settings to grant the permission manually.")
+                        .setPositiveButton("OK") { _, _ ->
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            val uri = Uri.fromParts("package", packageName, null)
+                            intent.data = uri
+                            startActivity(intent)
+                        }
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            Toast.makeText(this,"This app needs the Location permission",Toast.LENGTH_LONG).show()
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
+            }
+        }
+    }
 
     private fun getCurrentLocation() {
         if (checkLocationPermission()) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
-                    makeRequest(location.latitude, location.longitude)
+                    makeRequest(it.latitude, it.longitude)
                 }
             }
         } else {
@@ -194,7 +253,7 @@ class MainActivity : AppCompatActivity() {
 
         val weatherSky = when (weatherText) {
             "Sunny" -> R.drawable.sunny_background
-            "Party Cloud" -> R.drawable.party_cloud_background
+            "Party Cloudy" -> R.drawable.party_cloud_background
             else -> R.drawable.sunny_background
         }
 
