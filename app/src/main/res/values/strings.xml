@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Clothing Suggester</string>
+    <string name="all_clothes">All Clothes</string>
+    <string name="suggest_clothes">Suggest Clothes</string>
+    <string name="what_s_up">What\'s up!</string>
+    <string name="location">Egypt,</string>
+    <string name="city">Minia</string>
+    <string name="weather_degree">%s °C</string>
+    <string name="weather_status">Sunny</string>
+    <string name="weather_date">Apr</string>
+    <string name="suggest_for_you">Suggest Clothes for you....</string>
 </resources>
