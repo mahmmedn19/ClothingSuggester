@@ -8,5 +8,5 @@ object Constant {
     const val BASE_URL = "$SCHEME://$HOST/v1/current.json"
     const val WEATHER_API_KEY = "key"
     const val WEATHER_QUERY_PARAM = "q"
-    const val apikey = BuildConfig.API_KEY
+    const val API_KEY = BuildConfig.API_KEY
 }

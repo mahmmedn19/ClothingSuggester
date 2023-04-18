@@ -5,8 +5,8 @@
     <string name="what_s_up">What\'s up!</string>
     <string name="location">Egypt,</string>
     <string name="city">Minia</string>
-    <string name="weather_degree">%s\u00B0</string>
-    <string name="weather_status">Sunnay</string>
+    <string name="weather_degree">%s °C</string>
+    <string name="weather_status">Sunny</string>
     <string name="weather_date">Apr</string>
-    <string name="suggest_for_you">Suggest for you....</string>
+    <string name="suggest_for_you">Suggest Clothes for you....</string>
 </resources>

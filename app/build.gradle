@@ -3,11 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
 }
-File secretsFile = rootProject.file("secret.properties")
-Properties secretsProperties = new Properties()
-if (secretsFile.exists()) {
-    secretsProperties.load(new FileInputStream(secretsFile))
-}
+
 android {
     namespace 'com.example.clothingsuggester'
     compileSdk 33
@@ -18,7 +14,11 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "API_KEY", secretsProperties.getProperty("API_KEY", System.getenv("API_KEY")))
+
+        Properties secretsProperties = new Properties()
+        secretsProperties.load(project.rootProject.file("secret.properties").newDataInputStream())
+        buildConfigField("String", "API_KEY", "\"${secretsProperties.getProperty("API_KEY")}\"")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -35,7 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 }
@@ -58,4 +58,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     //gson
     implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
 }

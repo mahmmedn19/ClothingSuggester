@@ -4,9 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E6F2FB"
     tools:context=".MainActivity">
 
+    <View
+        android:id="@+id/view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_welcome"
@@ -41,7 +48,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="230dp"
         android:layout_margin="@dimen/spacing_medium"
         app:cardBackgroundColor="@color/white_200"
         app:cardCornerRadius="@dimen/spacing_medium"
@@ -54,16 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/spacing_medium">
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@style/ProgressStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_date"
@@ -111,10 +108,13 @@
                 style="@style/TextViewStyleWeatherStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_tiny"
+                android:textSize="@dimen/text_giant24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_weather_degree"
-                tools:text="@string/weather_status" />
+                tools:text="Sunny" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -125,22 +125,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_medium"
-        android:textSize="@dimen/text_giant"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card"
         android:text="@string/suggest_for_you"
-        android:textStyle="italic"
-        />
+        android:textColor="@color/black_78"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card" />
 
     <ImageView
         android:id="@+id/image_clothes"
         android:layout_width="260dp"
         android:layout_height="260dp"
-        android:scaleType="centerCrop"
         android:padding="@dimen/spacing_large"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_header" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/ProgressStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
