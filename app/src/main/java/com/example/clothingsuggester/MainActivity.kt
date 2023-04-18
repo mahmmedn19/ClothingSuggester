@@ -71,17 +71,20 @@ class MainActivity : AppCompatActivity() {
     private fun updateUi(weatherData: WeatherData) {
         val (formattedDate, formattedTime) = DateTimeFormat.parseDateString(weatherData.location.localTimeAndDate)
 
-        binding.textDate.text = formattedDate
-        binding.textTime.text = formattedTime
-        binding.textWeatherCountry.text = weatherData.location.countryName
-        binding.textWeatherCity.text = weatherData.location.cityName
-        binding.textWeatherStatus.text = weatherData.current.condition?.weatherStatus
-        binding.textWeatherDegree.text =
-            getString(R.string.weather_degree, weatherData.current.tempCelsius.toString())
-        getUpdatedWornClothesImage(
-            weatherData.current.tempCelsius!!.toInt(),
-            weatherData.current.condition!!.weatherStatus
-        )
+        binding.apply {
+            textDate.text = formattedDate
+            textTime.text = formattedTime
+            textWeatherCountry.text = weatherData.location.countryName
+            textWeatherCity.text = weatherData.location.cityName
+            textWeatherStatus.text = weatherData.current.condition?.weatherStatus
+            textWeatherDegree.text =
+                getString(R.string.weather_degree, weatherData.current.tempCelsius.toString())
+            getUpdatedWornClothesImage(
+                weatherData.current.tempCelsius!!.toInt(),
+                weatherData.current.condition!!.weatherStatus
+            )
+        }
+
     }
 
     private fun parseResponse(responseBody: String?): WeatherData {
@@ -89,7 +92,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeRequest(lat: Double, long: Double) {
-        Log.i(TAG, "Make")
         showProgress(true)
         val httpUrl = buildHttpUrl("${lat},${long}")
         val request = Request.Builder().apply { }.url(httpUrl).build()
@@ -126,7 +128,6 @@ class MainActivity : AppCompatActivity() {
         if (checkLocationPermission()) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
-                    //val locationName = getLocationName(location.latitude, location.longitude)
                     makeRequest(location.latitude, location.longitude)
                 }
             }
