@@ -25,7 +25,7 @@
         <item name="android:fontFamily">@font/poppins_semibold</item>
         <item name="android:textColor">@color/black_87</item>
         <item name="android:layout_marginStart">@dimen/spacing_medium</item>
-        <item name="android:layout_marginTop">@dimen/spacing_giant</item>
+        <item name="android:layout_marginTop">56dp</item>
     </style>
     <style name="TextViewStyleWeatherCountry" >
         <item name="android:textSize">@dimen/text_giant</item>
@@ -50,17 +50,27 @@
     <style name="TextViewStyleWeather" >
         <item name="android:textSize">@dimen/text_medium</item>
         <item name="android:fontFamily">@font/poppins</item>
-        <item name="android:textColor">@color/black_87</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_78</item>
     </style>
     <style name="TextViewStyleWeatherDegree" >
         <item name="android:textSize">@dimen/text_giant36</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textColor">@color/black_87</item>
+        <item name="android:layout_marginTop">@dimen/spacing_simi_medium</item>
     </style>
     <style name="TextViewStyleWeatherStatus" >
         <item name="android:textSize">@dimen/text_giant</item>
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:layout_marginTop">@dimen/spacing_simi_medium</item>
         <item name="android:textColor">@color/black_60</item>
+    </style>
+
+    <style name="LottieStyle" >
+        <item name="android:textSize">@dimen/text_giant</item>
+        <item name="android:layout_marginTop">@dimen/spacing_giant</item>
+        <item name="android:layout_marginEnd">-32dp</item>
+        <item name="lottie_autoPlay">true</item>
+        <item name="lottie_loop">true</item>
     </style>
 </resources>
