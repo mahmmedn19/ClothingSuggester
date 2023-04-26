@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import android.widget.SearchView
 import androidx.core.app.ActivityCompat
 import com.example.clothingsuggester.data.WeatherData
 import com.example.clothingsuggester.databinding.ActivityMainBinding
@@ -24,11 +25,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -74,7 +79,6 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUi(weatherData: WeatherData) {
         val (formattedDate, formattedTime) = DateTimeFormat.parseDateString(weatherData.location.localTimeAndDate)
-
         binding.apply {
             textDate.text = formattedDate
             textTime.text = formattedTime
@@ -95,10 +99,11 @@ class MainActivity : AppCompatActivity() {
         return Gson().fromJson(responseBody, WeatherData::class.java)
     }
 
-    private fun makeRequest(lat: Double, long: Double) {
+    private fun makeRequest(location: String) {
         showProgress(true)
-        val httpUrl = buildHttpUrl("${lat},${long}")
-        val request = Request.Builder().apply { }.url(httpUrl).build()
+        val httpUrl = buildHttpUrl(location)
+        val request = Request.Builder().url(httpUrl).build()
+
         myHttpClient.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
@@ -187,12 +192,34 @@ class MainActivity : AppCompatActivity() {
         if (checkLocationPermission()) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
-                    makeRequest(it.latitude, it.longitude)
+                    makeRequest("${it.latitude},${it.longitude}")
                 }
             }
         } else {
             requestLocationPermission()
         }
+        searchObservable
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { location ->
+                makeRequest(location)
+            }
+    }
+
+    private val searchObservable = Observable.create { emitter ->
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String): Boolean {
+                emitter.onNext(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                emitter.onNext(query)
+                return true
+            }
+        })
     }
 
     private fun checkLocationPermission(): Boolean {
@@ -212,31 +239,28 @@ class MainActivity : AppCompatActivity() {
         val newWornClothesSet = mutableSetOf<String>()
         val imageResource = getRandomImageForWeatherStatus(weatherStatus, weatherText)
 
-        if (wornClothesSet.contains(imageResource.toString())) {
-            val filteredWornClothesSet = wornClothesSet.filter { it != imageResource.toString() }
-            val newImageResource = if (filteredWornClothesSet.isEmpty()) {
+        val newImageResource = if (wornClothesSet.contains(imageResource.toString())) {
+            val filteredWornClothesSet = wornClothesSet - imageResource.toString()
+            if (filteredWornClothesSet.isEmpty()) {
                 getRandomImageForWeatherStatus(weatherStatus, weatherText)
             } else {
                 filteredWornClothesSet.random().toInt()
+            }.also {
+                newWornClothesSet.addAll(filteredWornClothesSet)
+                newWornClothesSet.add(it.toString())
             }
-            binding.imageClothes.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    applicationContext, newImageResource
-                )
-            )
-            newWornClothesSet.addAll(filteredWornClothesSet)
-            newWornClothesSet.add(newImageResource.toString())
         } else {
-            binding.imageClothes.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    applicationContext, imageResource
-                )
-            )
             newWornClothesSet.addAll(wornClothesSet)
             newWornClothesSet.add(imageResource.toString())
+            imageResource
         }
+
+        binding.imageClothes.setImageDrawable(
+            AppCompatResources.getDrawable(applicationContext, newImageResource)
+        )
         sharedUtil.saveWornClothes(newWornClothesSet)
     }
+
 
     private fun getRandomImageForWeatherStatus(weatherStatus: Int, weatherText: String): Int {
         val clothes = when {
@@ -251,7 +275,7 @@ class MainActivity : AppCompatActivity() {
             else -> R.raw.other
         }
 
-        val weatherSky = when (weatherText) {
+       val weatherSky = when (weatherText) {
             "Sunny" -> R.drawable.sunny_background
             "Party Cloudy" -> R.drawable.party_cloud_background
             else -> R.drawable.sunny_background
@@ -260,7 +284,7 @@ class MainActivity : AppCompatActivity() {
         binding.weatherImage.setAnimation(animation)
         binding.weatherImage.playAnimation()
 
-        binding.viewBackground.setBackgroundResource(weatherSky)
+     //   binding.viewBackground.setBackgroundResource(weatherSky)
 
         return clothes.random()
     }

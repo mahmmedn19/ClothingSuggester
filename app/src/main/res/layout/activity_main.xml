@@ -17,6 +17,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:background="@color/black_8"
+        android:iconifiedByDefault="false"
+        android:imeOptions="flagNoFullscreen"
+        android:queryBackground="@null"
+        android:queryHint="Search"
+        android:theme="@style/ThemeOverlay.Material3.Search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         android:id="@+id/text_welcome"
         style="@style/TextViewStyleWelcome"
@@ -24,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="@string/what_s_up"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <TextView
         android:id="@+id/text_weather_country"
